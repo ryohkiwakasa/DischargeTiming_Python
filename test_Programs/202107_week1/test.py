@@ -1,1 +1,1 @@
-print("test tekitou")
+print("test wakarimasuka?")
