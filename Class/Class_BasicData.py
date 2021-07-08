@@ -181,8 +181,10 @@ class BasicData:
 
     def convert_angle_to_norm(self, standard_vector, rotate_param=np.array([0.0, 0.0, 0.0]), not_reverse=True):
         phi_x = (2 * np.pi / 360) * self.Xangle
-        phi_z = (2 * np.pi / 360) * self.Yangle
-        phi_y = (2 * np.pi / 360) * self.Zangle * -1
+        # phi_y = (2 * np.pi / 360) * self.Yangle
+        phi_y = (2 * np.pi / 360) * self.Yangle * -1
+        # phi_z = (2 * np.pi / 360) * self.Zangle * -1
+        phi_z = (2 * np.pi / 360) * self.Zangle
         one_array = np.ones(phi_x.shape)
         zero_array = np.zeros(phi_x.shape)
         queue_x = np.array([[one_array, zero_array, zero_array],
