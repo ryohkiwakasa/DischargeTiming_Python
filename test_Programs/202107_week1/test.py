@@ -1,1 +1,1 @@
-print("test henkou")
+print("test tekitou")
