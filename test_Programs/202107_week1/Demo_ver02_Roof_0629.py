@@ -5,10 +5,9 @@ import copy
 import matplotlib.pyplot as plt
 import pandas as pd
 import csv
-
 sys.path.append('../../Class')
 # import Class_BasicData as BD
-import Class_My3D as My3D
+# import Class_My3D as My3D
 import Class_PaintData as PD
 import Class_RobotPath as RB
 import Class_SpeedProfile as SP
@@ -16,6 +15,15 @@ import Class_DischargeTiming as DT
 import Class_HeadArray as HA
 import Class_DischargeSimulation as DS
 import Function_Utility
+
+#from MyClass import Class_PaintData as PD
+#from MyClass import Class_RobotPath as RB
+#from MyClass import Class_SpeedProfile as SP
+#from MyClass import Class_DischargeTiming as DT
+#from MyClass import Class_HeadArray as HA
+#from MyClass import Class_DischargeSimulation as DS
+#from MyClass import Function_Utility
+
 
 RBfilepath = '../../Data/Part_A/Roof/Ver2_0625/DEMO_ROOF_UPPER_0625_3.JBI'
 PBfolderpath = '../../Data/Part_A/Roof/Ver2_0625/PaintData/DEMO_ROOF_UPPER_0625_3PAINT_'
@@ -90,44 +98,44 @@ for i in range(nozzles.nozzle_num):
     Nozzles.append(tmp)
 
 
-"""
-# タイミングデータの作成
 # """
-print("\n ----------- Create Timing Data --------- \n")
-TimingDatas = []
-# for i in range(1):
-S_idx_list = []
-E_idx_list = []
-wait_time = []
-for i in range(nozzles.nozzle_num):
-    print("\nCreate timing Data for nozzle", i+1)
-    dpiTiming = DT.DischargeTiming()
-    Nozzles[i].shift_normal_offset(height=10)  # ロボットパスが10 mm浮かした位置を基準にしているので面と同じにする
-    dpiTiming.set_data(path_data=Nozzles[i], paint_data=ReData_PB, nozzle_id=i)
-    dpiTiming.pred_simple_collision_pos()
-    dpiTiming.decide_simple_OnOff(direction=False)
-    # start_poses, end_poses, start_index, end_index = dpiTiming.decide_start_pos_and_end_pos(direction=False)
-    TimingDatas.append(dpiTiming)
-    s_index = dpiTiming.start_index[np.nonzero(dpiTiming.start_index)]
-    e_index = dpiTiming.end_index[np.nonzero(dpiTiming.end_index)]
-    print("start_index: ", s_index, "\nend_insex: ", e_index)
-    tmp_wait_time = []
-    for idx in range(e_index.shape[0]-1):
-        print("s_index: ", s_index[idx+1], "\te_index: ", e_index[idx])
-        time = ReData_RB.time[s_index[idx+1]] - ReData_RB.time[e_index[idx]]
-        print("wait time: ", time)
-        tmp_wait_time.append(time)
-    wait_time.append(tmp_wait_time)
-    # print("nozzle: ", i+1, "\nwait time: ", tmp_wait_time)
+# # タイミングデータの作成
+# # """
+# print("\n ----------- Create Timing Data --------- \n")
+# TimingDatas = []
+# # for i in range(1):
+# S_idx_list = []
+# E_idx_list = []
+# wait_time = []
+# for i in range(nozzles.nozzle_num):
+#     print("\nCreate timing Data for nozzle", i+1)
+#     dpiTiming = DT.DischargeTiming()
+#     Nozzles[i].shift_normal_offset(height=10)  # ロボットパスが10 mm浮かした位置を基準にしているので面と同じにする
+#     dpiTiming.set_data(path_data=Nozzles[i], paint_data=ReData_PB, nozzle_id=i)
+#     dpiTiming.pred_simple_collision_pos()
+#     dpiTiming.decide_simple_OnOff(direction=False)
+#     # start_poses, end_poses, start_index, end_index = dpiTiming.decide_start_pos_and_end_pos(direction=False)
+#     TimingDatas.append(dpiTiming)
+#     s_index = dpiTiming.start_index[np.nonzero(dpiTiming.start_index)]
+#     e_index = dpiTiming.end_index[np.nonzero(dpiTiming.end_index)]
+#     print("start_index: ", s_index, "\nend_insex: ", e_index)
+#     tmp_wait_time = []
+#     for idx in range(e_index.shape[0]-1):
+#         print("s_index: ", s_index[idx+1], "\te_index: ", e_index[idx])
+#         time = ReData_RB.time[s_index[idx+1]] - ReData_RB.time[e_index[idx]]
+#         print("wait time: ", time)
+#         tmp_wait_time.append(time)
+#     wait_time.append(tmp_wait_time)
+#     # print("nozzle: ", i+1, "\nwait time: ", tmp_wait_time)
 
 
 i = 1
 # np.get_printoptions()
 # np.set_printoptions(precision=3)
 # np.get_printoptions()
-for time_print in wait_time:
-    print("nozzle: ", i, "\nwait time: ", pd.DataFrame(time_print).round(2))
-    i += 1
+# for time_print in wait_time:
+#     print("nozzle: ", i, "\nwait time: ", pd.DataFrame(time_print).round(2))
+#     i += 1
 
 # i = 1
 # with open("wait_head_time.csv", 'w',  newline="") as f:
@@ -151,8 +159,8 @@ for time_print in wait_time:
 # sim_target_nozzle = 0  # 0~47
 # # sim_target_label = 6
 # sim_target_label = 12
-# target_3d = '../../Data/Demo_ver1/ASSY_hokan.stl'
-# # target_3d = '../../Data/Demo_ver1/ASSY_hokan_Voxel_2m.stl'
+# target_3d = '../../3DModel/ASSY_hokan.stl'
+# # target_3d = '../../3DModel/ASSY_hokan_smooth_rough090.stl'
 # sim = DS.DischargeSimulation(target_3d)
 # sim.delta_t = 5E-4
 # # sim.delta_t = 7E-4
@@ -181,7 +189,7 @@ for time_print in wait_time:
 --- pyvista による3Dビューワー ---
 """
 print("\n ----------- 3D viewer by pyvista --------- \n")
-filename = '../../Data/Demo_ver1/ASSY_hokan.stl'
+filename = '../../3DModel/ASSY_hokan_smooth_rough090.stl'
 # filename = '../../Data/Demo_ver1/ASSY_hokan_Voxel_2m.stl'
 # mesh = pv.read(filename)
 mesh = pv.read(filename)

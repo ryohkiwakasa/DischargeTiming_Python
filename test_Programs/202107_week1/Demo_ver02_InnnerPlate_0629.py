@@ -35,8 +35,8 @@ Raw_RB.convert_angle_to_norm(standard_vector=np.array([0, 1, 0]))
 # Raw_RB.shift_normal_offset(height=10)
 ReData_RB = RB.RobotPath()
 ReData_RB = Raw_RB.resampling60dpi(ReData_RB, thresh=50, without_point_s=3, without_point_e=3)
-ReData_RB.convert_angle_to_norm(standard_vector=np.array([0, -1, 0]), rotate_param=rotate_param)
-# ReData_RB.convert_angle_to_norm(standard_vector=np.array([0, 0, 1]), rotate_param=rotate_param)
+# ReData_RB.convert_angle_to_norm(standard_vector=np.array([0, -1, 0]), rotate_param=rotate_param)
+ReData_RB.convert_angle_to_norm(standard_vector=np.array([0, 0, 1]), rotate_param=rotate_param)
 # ReData_RB.convert_angle_to_norm(standard_vector=np.array([1, 0, 0]), rotate_param=rotate_param)
 ReData_RB.get_head_angle(rotate_param=rotate_param, big_head=False)
 
@@ -203,6 +203,11 @@ plotter.add_mesh(pv.PolyData(NozzlePos), color="gray", point_size=3, render_poin
 # plotter.add_mesh(pv.PolyData(pos_list), color='black', point_size=4, render_points_as_spheres=True)
 
 plotter.add_arrows(cent=RobotData_Re, direction=Arrow_Re)
+
+R = ReData_RB.rot(rotate_param)
+plotter.add_arrows(cent=np.array([0, 0, 0]), direction=np.dot(np.array([1, 0, 0]), R)*20)
+plotter.add_arrows(cent=np.array([0, 0, 0]), direction=np.dot(np.array([0, 1, 0]), R)*30)
+plotter.add_arrows(cent=np.array([0, 0, 0]), direction=np.dot(np.array([0, 0, 1]), R)*40)
 
 
 plotter.show()
